@@ -1,0 +1,11 @@
+[package]
+name = "rustplacements"
+version = "0.1.0"
+authors = ["Peternator7 <glotfelty.2@osu.edu>"]
+
+[dependencies]
+lazy_static = "0.2.8"
+rand = "0.3.16"
+
+[lib]
+plugin = true
