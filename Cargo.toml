@@ -2,6 +2,11 @@
 name = "rustplacements"
 version = "0.1.0"
 authors = ["Peternator7 <glotfelty.2@osu.edu>"]
+description = "A rust compiler plugin for modifying string literals"
+repository  = "https://github.com/Peternator7/rustplacements"
+keywords = ["plugin","string-literal","compiler-plugin"]
+category = ["development-tools::procedural-macro-helpers", "text-processing"]
+license = "MIT"
 
 [dependencies]
 lazy_static = "0.2.8"
