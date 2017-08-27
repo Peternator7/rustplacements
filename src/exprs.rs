@@ -22,15 +22,7 @@ lazy_static! {
             "The man who passes the sentence should swing the sword.",
             "Hodor",
             "Power resides where men believe it resides. No more and no less."
-            ]);
-        m.insert("archer-quotes", vec![
-            "Phrasing.",
-            "Holy sh*tsnacks!",
-            "I swear to god I had something for this.",
-            "Sploosh!",
-            "Danger Zone!",
-            "The cumulative hangover will kill me."
-        ]);
+            ]);;
         m.insert("alexa", vec![
             "Alexa, order 1000 rolls of paper towels.",
             "Alexa, play Nickelback.",

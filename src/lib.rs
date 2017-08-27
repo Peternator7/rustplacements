@@ -28,10 +28,10 @@ struct Context<'a> {
 #[plugin_registrar]
 pub fn plugin_registrar(reg: &mut Registry) {
     reg.register_syntax_extension(Symbol::intern("Rustplacements"),
-                                  SyntaxExtension::MultiModifier(Box::new(grootify)))
+                                  SyntaxExtension::MultiModifier(Box::new(rustplace)))
 }
 
-fn grootify(_: &mut ExtCtxt, _: Span, m: &MetaItem, an: Annotatable) -> Vec<Annotatable> {
+fn rustplace(_: &mut ExtCtxt, _: Span, m: &MetaItem, an: Annotatable) -> Vec<Annotatable> {
     let category = match m.node {
         MetaItemKind::List(..) => panic!("This plugin does not support list style attributes."),
         MetaItemKind::Word => Symbol::intern("fizzbuzz"),
@@ -48,28 +48,28 @@ fn grootify(_: &mut ExtCtxt, _: Span, m: &MetaItem, an: Annotatable) -> Vec<Anno
     vec![an.trans(&ctxt)]
 }
 
-trait GrootTrans {
+trait Rustplace {
     fn trans(self, ctxt: &Context) -> Self;
 }
 
-impl<T: GrootTrans + 'static> GrootTrans for P<T> {
+impl<T: Rustplace + 'static> Rustplace for P<T> {
     fn trans(self, ctxt: &Context) -> Self {
         self.map(|inner| inner.trans(ctxt))
     }
 }
 
-impl<T: GrootTrans> GrootTrans for Vec<T> {
+impl<T: Rustplace> Rustplace for Vec<T> {
     fn trans(self, ctxt: &Context) -> Self {
         self.into_iter().map(|i| i.trans(ctxt)).collect()
     }
 }
 
 // We can invoke this rule on most of the struct types.
-macro_rules! GrootTrans {
+macro_rules! Rustplace {
     // For many of the structs, the field is called "node" so we simplify that case.
-    ($ty:ident) => (GrootTrans!($ty,node););
+    ($ty:ident) => (Rustplace!($ty,node););
     ($ty:ident,$field:tt) => (
-        impl GrootTrans for $ty {
+        impl Rustplace for $ty {
             fn trans(self, ctxt: &Context) -> Self {
                 $ty {
                     $field: self.$field.trans(ctxt),
@@ -81,18 +81,18 @@ macro_rules! GrootTrans {
 }
 
 // We can autoimplement some of the structs because the all change the same field. :)
-GrootTrans!(Item);
-GrootTrans!(TraitItem);
-GrootTrans!(ImplItem);
-GrootTrans!(Stmt);
-GrootTrans!(Expr);
+Rustplace!(Item);
+Rustplace!(TraitItem);
+Rustplace!(ImplItem);
+Rustplace!(Stmt);
+Rustplace!(Expr);
 // These follow the same basic pattern, but the field has a different name.
-GrootTrans!(Block, stmts);
-GrootTrans!(Field, expr);
-GrootTrans!(Mod, items);
+Rustplace!(Block, stmts);
+Rustplace!(Field, expr);
+Rustplace!(Mod, items);
 
 // These need 1 extra map so we just wrote them out.
-impl GrootTrans for Local {
+impl Rustplace for Local {
     fn trans(self, ctxt: &Context) -> Self {
         Local {
             init: self.init.map(|i| i.trans(ctxt)),
@@ -101,7 +101,7 @@ impl GrootTrans for Local {
     }
 }
 
-impl GrootTrans for Arm {
+impl Rustplace for Arm {
     fn trans(self, ctxt: &Context) -> Self {
         Arm {
             guard: self.guard.map(|i| i.trans(ctxt)),
@@ -112,7 +112,7 @@ impl GrootTrans for Arm {
 
 // All the enums need to be manually implemented and we figure out what variants it makes sense
 // for us to transform.
-impl GrootTrans for Annotatable {
+impl Rustplace for Annotatable {
     fn trans(self, ctxt: &Context) -> Self {
         use Annotatable::*;
         match self {
@@ -123,7 +123,7 @@ impl GrootTrans for Annotatable {
     }
 }
 
-impl GrootTrans for ItemKind {
+impl Rustplace for ItemKind {
     fn trans(self, ctxt: &Context) -> Self {
         use ItemKind::*;
         match self {
@@ -138,7 +138,7 @@ impl GrootTrans for ItemKind {
     }
 }
 
-impl GrootTrans for TraitItemKind {
+impl Rustplace for TraitItemKind {
     fn trans(self, ctxt: &Context) -> Self {
         use TraitItemKind::*;
         match self {
@@ -149,7 +149,7 @@ impl GrootTrans for TraitItemKind {
     }
 }
 
-impl GrootTrans for ImplItemKind {
+impl Rustplace for ImplItemKind {
     fn trans(self, ctxt: &Context) -> Self {
         use ImplItemKind::*;
         match self {
@@ -160,7 +160,7 @@ impl GrootTrans for ImplItemKind {
     }
 }
 
-impl GrootTrans for StmtKind {
+impl Rustplace for StmtKind {
     fn trans(self, ctxt: &Context) -> Self {
         use StmtKind::*;
         match self {
@@ -173,7 +173,7 @@ impl GrootTrans for StmtKind {
     }
 }
 
-impl GrootTrans for ExprKind {
+impl Rustplace for ExprKind {
     fn trans(self, ctxt: &Context) -> Self {
         use ExprKind::*;
         match self {
@@ -229,7 +229,7 @@ impl GrootTrans for ExprKind {
     }
 }
 
-impl GrootTrans for Spanned<LitKind> {
+impl Rustplace for Spanned<LitKind> {
     fn trans(self, ctxt: &Context) -> Self {
         use LitKind::*;
         match self.node {
@@ -239,20 +239,24 @@ impl GrootTrans for Spanned<LitKind> {
                     .lines()
                     .map(|line| {
                         let mut output = String::new();
+                        let mut idx = 0;
                         // Copy the lead whitespace over.
                         for c in line.chars() {
                             if c.is_whitespace() {
+                                idx += 1;
                                 output.push(c);
                             } else {
                                 break;
                             }
                         }
 
+                        let l = line.chars().count();
                         // Now just append random stuff.
-                        while output.len() < line.len() {
+                        while idx < l {
                             let r = rand::random::<usize>() % ctxt.text.len();
                             output.push_str(ctxt.text[r]);
                             output.push(' ');
+                            idx += ctxt.text[r].chars().count();
                         }
 
                         // TODO: Remove the trailing ' '.
