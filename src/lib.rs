@@ -96,10 +96,7 @@
 //!
 //! That's pretty much all there is to it. Check out the [categories page](https://github.com/Peternator7/rustplacements/blob/master/CATEGORIES.md) for more categories that you can use.
 
-extern crate rustc;
 extern crate syntax;
-extern crate syntax_ext;
-extern crate syntax_pos;
 extern crate rustc_plugin;
 extern crate rand;
 #[macro_use]
