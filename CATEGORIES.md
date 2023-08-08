@@ -13,8 +13,15 @@ Here's a page of all the categories that Rustplacements can inject into your cod
 
  1. `got-quotes`: Game of Thrones quotes
  2. `friends-quotes`: Friends (tv) quotes
+ 3. `dj-khaled-quotes`: Quotes from the famous american DJ
+ 4. `lol-shaco-quotes`: Most sane League of Legends champion Shaco's quotes
 
 ## Random
 
  1. `Alexa phrases`: send this to text-to-speech and let Alexa help you out.
+ 2. `morse`: .... . .-.. .--. ... / -.-- --- ..- / - --- / ..- -. -.. . .-. ... - .- -. -.. / -- --- .-. ... . .-.-.-
+
+## For Cats
+
+ 1. `kittycat-lang`: translates everything to [kittycat language](https://github.com/Emivvvvv/kittycat_lang) to help you talk with your cat.
 

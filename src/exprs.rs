@@ -30,6 +30,7 @@ lazy_static! {
             "Alexa, how old are you?",
             "Alexa, call grandma.",
             "Alexa, order me a pizza.",
+            "Alexa, play despacito."
         ]);
         m.insert("friends-quotes", vec![]);
         m.insert("emojis",vec!["😀", "😃", "😄", "😁", "😆", "😅", "😂", "🤣", "😊", "😇", "🙂", "🙃", "😉", "😌", "😍", "😘",
@@ -37,6 +38,29 @@ lazy_static! {
                               "😔", "😟", "😕", "🙁", "☹️", "😣", "😖", "😫", "😩", "😤", "😠", "😡", "😶", "😐", "😑", "😯", 
                               "😦", "😧", "😮", "😲", "😵", "😳", "😱", "😨", "😰", "😢", "😥", "🤤", "😭", "😓", "😪", "😴", 
                               "🙄", "🤔", "🤥", "😬", "🤐", "🤢", "🤧", "😷", "🤒", "🤕", "😈", "👿"]);
+        m.insert("kittycat-lang",vec!["MEOW", "meow", "mEOw", "Meow", "MeoW", "Meow", "meoW", "prrr", "mrrr"])
+        m.insert("dj-khaled-quotes", vec![
+            "Call me asparagus",
+            "This is called what?",
+            "Life... is roblox.",
+            "God did!", "DJ KHALED!!!",
+            "TELL 'EM BRING OUT THE LOBSTER",
+            "Let's go to the beach hahhaha",
+            "Let's go swimming hahahah",
+            "I call her chandelier",
+            "Have you ever played rugby?"])
+        m.insert("morse", vec![".", "-", " "])
+        m.insert("lol-shaco", vec![
+            "This will be fun!",
+            "Here we go!",
+            "Just a little bit closer!",
+            "Now you see me, now you don't!",
+            "March, march, march, march!",
+            "The joke's on you!",
+            "Why so serious?",
+            "For my next trick, I'll make you disappear!",
+            "Shaco laughs menacingly.",
+            "Look... behind you."])
         m
     };
 }
